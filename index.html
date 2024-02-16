@@ -54,7 +54,7 @@
 
         <div id="seccio_2" class="seccio">    <!-- espai central per mostrar contingut -->
             <div id="div_foto">    <!-- contenidor de la vista prèvia de la foto feta -->
-                <img id="foto">
+                <img id="foto" onclick="mostra_foto(0)">    <!-- crida el procediment per veure-la a pantalla completa -->
                 <i id="icona_camera" class="fa-solid fa-image"></i>    <!-- icona que ocupa l'espai quan encara no s'ha fet la foto -->
             </div>
             <div id="div_control">    <!-- contenidor dels botons per fer i desar la foto -->
@@ -64,10 +64,12 @@
                 <input type="file" accept="image/*" id="obturador" capture="camera" /> <!-- element que captura la imatge -->
                 <i id="desa" class="fa-solid fa-check"></i>    <!-- icona del botó per desar la foto -->
             </div>
-            <canvas id="canvas"></canvas>
-            <div id="div_gran">
-                <img id="foto_gran"/>
-            </div>
+           
+        </div>
+        <!-- elements auxiliars a la secció 2 -->
+        <canvas id="canvas"></canvas>   <!-- element no visible -->
+        <div id="div_gran">     <!-- contenidor a on es mostrarà la foto a pantalla completa -->
+            <img id="foto_gran"/>
         </div>
 
         <div id="seccio_3" class="seccio">

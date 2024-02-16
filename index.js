@@ -23,7 +23,7 @@ function canvia_seccio(num_boto) {
 
 // Inici de sessió
 
-let validat = false;    // variable que permet saber si hi ha algun usuari validat
+let validat = true;    // variable que permet saber si hi ha algun usuari validat
 let nom, contrasenya;
 let scriptURL = "https://script.google.com/macros/s/AKfycbyeY1Z7_0cq2dSw_iUU2QygiGAKMTYJz_MdkKPvfeJwiiWD4yLoSFVXPdo1Qmn4ph_m/exec"    // s'ha de substituir la cadena de text per la URL del script
 
@@ -82,17 +82,20 @@ function nou_usuari() {
         });
 }
 
-window.onload = () => { 
-    let base_de_dades = storage.getItem("base_de_dades");   
-    if(base_de_dades == null) {
-        indexedDB.open("Dades").onupgradeneeded = event => {   
+// Càmera de fotos
+
+window.onload = () => {    // funció que s'executa un cop carregat el document HTML
+    let base_de_dades = localStorage.getItem("base_de_dades");   // compte! Ha de ser localStorage o sessionStorage
+    if(base_de_dades == null) {    // la base de dades només es crea si encara no existeix
+        indexedDB.open("Dades").onupgradeneeded = event => {     // esdeveniment de creació o actualització de la base de dades "Dades"  
             event.target.result.createObjectStore("Fotos", {keyPath: "ID", autoIncrement:true}).createIndex("Usuari_index", "Usuari");
-        }    // les fotos es desen a la taula "Fotos"
-        storage.setItem("base_de_dades","ok");
+        }   // es crea la taula "Fotos" amb la clau principal "ID" i els indexos de consulta "Usuari_index" i "Usuari"
+            // les fotos es desen a la taula "Fotos"
+        localStorage.setItem("base_de_dades","ok");    // es desa la informació conforme la base de dades ja s'ha creat
     }
     document.getElementById("obturador").addEventListener("change", function() {    // procediment que s'executa quan s'obté el fitxer de la foto realitzada (esdeveniment "change")
         if(this.files[0] != undefined) {    // instruccions que s'executen només si s'obté algun fitxer (només es processa el primer que es rebi)
-            canvia_seccio(3);
+                                            // this fa referència a l'element on s'ha generat l'esdeveniment (en aquest cas l' <input> del fitxer de la foto). 
             let canvas = document.getElementById("canvas");    // contenidor on es desa temporalment la imatge
             let context = canvas.getContext("2d");
             let imatge = new Image;
@@ -101,12 +104,49 @@ window.onload = () => {
                 canvas.width = imatge.width;
                 canvas.height = imatge.height;                
                 context.drawImage(imatge,0,0,imatge.width,imatge.height);    // es "dibuixa" la imatge en el canvas
+                // document.getElementById("canvas").style.display = "unset";   // això mostraria la imatge al canvas que no té definides dimensions i ocuparia tot l'espai
                 document.getElementById("foto").src = canvas.toDataURL("image/jpeg");    // la imatge es mostra en format jpg
                 document.getElementById("icona_camera").style.display = "none";    // s'oculta la icona que hi havia abans de fer la foto
                 document.getElementById("desa").style.display = "unset";    // es mostra el botó per desar la foto
             }
         }
     });
+}
+
+function mostra_foto(id) {
+    let canvas = document.getElementById("canvas");
+    let context = canvas.getContext("2d");
+    let imatge = new Image;
+    if (id == 0) {    // darrera foto realitzada, potser sense desar
+        seccio_origen = 2;    // origen en la seccció "càmera"
+        document.getElementById("seccio_2").style.display = "none";    // s'oculta la secció "càmera"
+        imatge.src = document.getElementById("foto").src;
+    }
+    else {
+        seccio_origen = 3;    // origen en la seccció "galeria"
+        indexedDB.open("Dades").onsuccess = event => {    // s'obté la foto de la base de dades
+            event.target.result.transaction(["Fotos"], "readonly").objectStore("Fotos").get(id).onsuccess = event => {
+                document.getElementById("seccio_3").style.display = "none";    // s'oculta la secció "galeria"
+                imatge.src = event.target.result["Foto"];
+            }
+        }
+    }
+    imatge.onload = () => {    // esdeveniment que es produeix un cop s'ha carregat la imatge
+        if (imatge.width > imatge.height) {    // imatge apaïsada
+            canvas.width = imatge.height;
+            canvas.height = imatge.width;
+            context.translate(imatge.height, 0);
+            context.rotate(Math.PI / 2);
+        } else {    // imatge vertical
+            canvas.width = imatge.width;
+            canvas.height = imatge.height;
+        }
+        context.drawImage(imatge,0,0,imatge.width,imatge.height);
+        document.getElementById("foto_gran").src = canvas.toDataURL("image/jpeg", 0.5);
+    }
+    document.getElementById("superior").classList.add("ocult");    // s'oculta provisionalment el contenidor superior
+    document.getElementById("menu").style.display = "none";    // s'oculta el menú
+    document.getElementById("div_gran").style.display = "flex";    // es mostra el contenidor de la foto a pantalla completa
 }
 
 // Tancament de sessió

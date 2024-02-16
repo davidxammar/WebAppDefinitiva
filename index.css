@@ -21,13 +21,16 @@ body {
     color: white;    /* color del text */
     background-color: #950E17;    /* color de fons */
 }
+/* .ocult {
+    display: none !important;    /* amb prioritat sobre les declaracions condicionals segons l'orientació */
+/* } */
 .seccio {
     flex: 1;    /* les seccions ocupen tot l'espai disponible */
     display: none;    /* les seccions s'inicien ocultes, excepte la primera */
 }
 
 #seccio_0 {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
