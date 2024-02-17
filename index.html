@@ -62,14 +62,14 @@
                     <i class="fa-solid fa-circle-dot"></i>
                 </label>
                 <input type="file" accept="image/*" id="obturador" capture="camera" /> <!-- element que captura la imatge -->
-                <i id="desa" class="fa-solid fa-check"></i>    <!-- icona del botó per desar la foto -->
+                <i id="desa" class="fa-solid fa-check" onclick="desa_foto()"></i>    <!-- icona del botó per desar la foto -->
             </div>
            
         </div>
         <!-- elements auxiliars a la secció 2 -->
         <canvas id="canvas"></canvas>   <!-- element no visible -->
         <div id="div_gran">     <!-- contenidor a on es mostrarà la foto a pantalla completa -->
-            <img id="foto_gran"/>
+            <img id="foto_gran" onclick="retorn_a_seccio()"/>
         </div>
 
         <div id="seccio_3" class="seccio">

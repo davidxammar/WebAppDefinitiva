@@ -82,7 +82,7 @@ function nou_usuari() {
         });
 }
 
-// Càmera de fotos
+// Secció 2: Càmera de fotos
 
 window.onload = () => {    // funció que s'executa un cop carregat el document HTML
     let base_de_dades = localStorage.getItem("base_de_dades");   // compte! Ha de ser localStorage o sessionStorage
@@ -104,7 +104,6 @@ window.onload = () => {    // funció que s'executa un cop carregat el document 
                 canvas.width = imatge.width;
                 canvas.height = imatge.height;                
                 context.drawImage(imatge,0,0,imatge.width,imatge.height);    // es "dibuixa" la imatge en el canvas
-                // document.getElementById("canvas").style.display = "unset";   // això mostraria la imatge al canvas que no té definides dimensions i ocuparia tot l'espai
                 document.getElementById("foto").src = canvas.toDataURL("image/jpeg");    // la imatge es mostra en format jpg
                 document.getElementById("icona_camera").style.display = "none";    // s'oculta la icona que hi havia abans de fer la foto
                 document.getElementById("desa").style.display = "unset";    // es mostra el botó per desar la foto
@@ -147,6 +146,31 @@ function mostra_foto(id) {
     document.getElementById("superior").classList.add("ocult");    // s'oculta provisionalment el contenidor superior
     document.getElementById("menu").style.display = "none";    // s'oculta el menú
     document.getElementById("div_gran").style.display = "flex";    // es mostra el contenidor de la foto a pantalla completa
+}
+
+function retorn_a_seccio() {
+    document.getElementById("superior").classList.remove("ocult");    // s'elimina la classe provisional del contenidor superior
+    document.getElementById("menu").style.display = "flex";    // es mostra el menú
+    document.getElementById("div_gran").style.display = "none";    // s'oculta el contenidor de pantalla completa
+    if (seccio_origen == 2) {    // càmera
+        document.getElementById("seccio_2").style.display = "flex";
+    } else {    // galeria
+        document.getElementById("seccio_3").style.display = "flex";
+    }
+}
+
+function desa_foto() {
+    let nou_registre = {    // contingut del nou registre de la base de dades
+        Usuari: nom,    // nom d'usuari
+        Data: new Date().toLocaleDateString() + " - " + new Date().toLocaleTimeString(),    // data i hora actuals
+        Foto: document.getElementById("foto").src    // foto
+    };
+    indexedDB.open("Dades").onsuccess = event => {   
+        event.target.result.transaction("Fotos", "readwrite").objectStore("Fotos").add(nou_registre).onsuccess = () => {
+            document.getElementById("desa").style.display = "none";
+            alert("La foto s'ha desat correctament.");    
+        };
+    };
 }
 
 // Tancament de sessió
