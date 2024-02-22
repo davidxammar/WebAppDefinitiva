@@ -12,6 +12,9 @@ body {
     font-family: sans-serif;    /* un tipus de lletra adient per a llocs web */
     background-color: #FCDEE0;    /* color de fons en format #RRGGBB */
 }
+
+/* Capçalera de l'app */
+
 #superior {
     display: flex;
     height: 8vmax;    /* alçària d'un 8% respecte l'alçària de la pantalla */
@@ -29,8 +32,10 @@ body {
     display: none;    /* les seccions s'inicien ocultes, excepte la primera */
 }
 
+/* Secció 0: Registre */
+
 #seccio_0 {
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -60,6 +65,8 @@ body {
     margin: 1vmin;
 }
 
+/* Secció 1: Home */
+
 #seccio_1 {
     display: none;
     flex-direction: column;
@@ -83,6 +90,8 @@ body {
     height: 50vmin;
     object-fit: scale-down;
 }
+
+/* Secció 2: Càmera de fotos */
 
 #seccio_2 {
     display: none;
@@ -137,6 +146,8 @@ body {
     cursor: pointer;
 }
 
+/* Secció 3: Galeria */
+
 #seccio_3 {
     display: none;
     flex-direction: column;
@@ -164,9 +175,35 @@ body {
     height: 70vmax;
     overflow-y: scroll;
 }
-#llista_fotos::-webkit-scrollbar {
+ #llista_fotos::-webkit-scrollbar {
     display: none;    /* oculta la barra de desplaçament vertical */
 }
+.llista_fila {
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
+.llista_fila div {    /* contenidor de la miniatura de la foto */
+    flex: 2;
+}
+.llista_fila img {    /* miniatura de la foto */
+    width: 10vmax;
+    height: 10vmax;
+    cursor: pointer;
+}
+.llista_fila span {    /* data i hora */
+    flex: 3;
+    font-size: 2vmax;
+}
+.llista_fila i {    /* icona per esborrar la foto */
+    flex: 1;
+    color: #950E17;
+    font-size: 4vmax !important;
+    cursor: pointer;
+}
+
+
+/* Secció 4: Mapa */
 
 #seccio_4 {
     display: none;
